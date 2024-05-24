@@ -3,7 +3,7 @@ package middlewares
 import (
 	"github.com/golang-jwt/jwt/v4"
 	"go-jwt-mux/config"
-	"go-jwt-mux/helper"
+	"go-jwt-mux/helpers"
 	"net/http"
 )
 
@@ -13,7 +13,7 @@ func JWTMiddleware(next http.Handler) http.Handler {
 		if err != nil {
 			if err == http.ErrNoCookie {
 				response := map[string]string{"message": "Unauthorized"}
-				helper.ResponseJSON(w, http.StatusUnauthorized, response)
+				helpers.ResponseJSON(w, http.StatusUnauthorized, response)
 				return
 			}
 		}
@@ -31,23 +31,23 @@ func JWTMiddleware(next http.Handler) http.Handler {
 			case jwt.ValidationErrorSignatureInvalid:
 				//token invalid
 				response := map[string]string{"message": "Unauthorized"}
-				helper.ResponseJSON(w, http.StatusUnauthorized, response)
+				helpers.ResponseJSON(w, http.StatusUnauthorized, response)
 				return
 			case jwt.ValidationErrorExpired:
 				//token expired
 				response := map[string]string{"message": "Unauthorized, Token expired"}
-				helper.ResponseJSON(w, http.StatusUnauthorized, response)
+				helpers.ResponseJSON(w, http.StatusUnauthorized, response)
 				return
 			default:
 				response := map[string]string{"message": "Unauthorized"}
-				helper.ResponseJSON(w, http.StatusUnauthorized, response)
+				helpers.ResponseJSON(w, http.StatusUnauthorized, response)
 				return
 			}
 		}
 
 		if !token.Valid {
 			response := map[string]string{"message": "Unauthorized"}
-			helper.ResponseJSON(w, http.StatusUnauthorized, response)
+			helpers.ResponseJSON(w, http.StatusUnauthorized, response)
 			return
 		}
 
